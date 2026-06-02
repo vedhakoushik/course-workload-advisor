@@ -1,0 +1,242 @@
+[
+  {
+    "id": "P01",
+    "student": {
+      "name": "Arjun", "year": 2, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": ["CS-101", "MATH-201"],
+      "wants_to_take": ["CS-201", "CS-210", "MATH-301", "ENG-101"],
+      "no_early_classes": false, "early_cutoff": "09:00",
+      "max_credits": 12, "max_workload_hrs": 40,
+      "free_text": "Full time student, no job, fine with any time slot"
+    },
+    "expected_in": ["CS-201", "MATH-301", "ENG-101"],
+    "expected_out": [],
+    "expected_conflict": [],
+    "notes": "CS-210 Mon/Wed 10-11 conflicts with nothing but fits; MATH-301 prereq met"
+  },
+  {
+    "id": "P02",
+    "student": {
+      "name": "Priya", "year": 2, "major": "CS",
+      "job_hrs_per_week": 20,
+      "completed_courses": ["CS-101"],
+      "wants_to_take": ["CS-201", "CS-301", "MATH-201", "HUM-101"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 9, "max_workload_hrs": 30,
+      "free_text": "Works 20hrs/week, hates 8am"
+    },
+    "expected_in": ["CS-201", "HUM-101"],
+    "expected_out": ["MATH-201"],
+    "expected_conflict": ["CS-301"],
+    "notes": "CS-301 blocked by prereq (CS-201 not yet done). MATH-201 is 8am = conflict. Workload is tight at 20hr job."
+  },
+  {
+    "id": "P03",
+    "student": {
+      "name": "Rohan", "year": 3, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": ["CS-101","CS-201","MATH-201","MATH-301"],
+      "wants_to_take": ["CS-301","CS-401","CS-350","HUM-101"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 12, "max_workload_hrs": 45,
+      "free_text": "3rd year, no job, avoid early classes, want challenging courses"
+    },
+    "expected_in": ["CS-350","HUM-101"],
+    "expected_out": [],
+    "expected_conflict": ["CS-301","CS-401"],
+    "notes": "CS-301 is 8am = escalate. CS-401 prereqs met but depends on CS-301 choice."
+  },
+  {
+    "id": "P04",
+    "student": {
+      "name": "Divya", "year": 1, "major": "CS",
+      "job_hrs_per_week": 10,
+      "completed_courses": [],
+      "wants_to_take": ["CS-101","MATH-201","ENG-101","HUM-101"],
+      "no_early_classes": false, "early_cutoff": "09:00",
+      "max_credits": 12, "max_workload_hrs": 30,
+      "free_text": "First year, part-time job 10hrs, manageable workload"
+    },
+    "expected_in": ["CS-101","ENG-101","HUM-101"],
+    "expected_out": ["MATH-201"],
+    "expected_conflict": [],
+    "notes": "MATH-201 is 8am but student has no_early_classes=false so it should be fine. Workload tight with job."
+  },
+  {
+    "id": "P05",
+    "student": {
+      "name": "Karan", "year": 3, "major": "CS",
+      "job_hrs_per_week": 15,
+      "completed_courses": ["CS-101","CS-201","CS-210","MATH-201"],
+      "wants_to_take": ["CS-301","CS-350","CS-320","MATH-302"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 12, "max_workload_hrs": 35,
+      "free_text": "3rd year, 15hr job, no early classes, strong student"
+    },
+    "expected_in": ["CS-350","CS-320","MATH-302"],
+    "expected_out": [],
+    "expected_conflict": ["CS-301"],
+    "notes": "CS-301 is 8am = escalate. Others are fine prereqs and timing."
+  },
+  {
+    "id": "P06",
+    "student": {
+      "name": "Sneha", "year": 2, "major": "CS",
+      "job_hrs_per_week": 25,
+      "completed_courses": ["CS-101","MATH-201"],
+      "wants_to_take": ["CS-201","MATH-301","ENG-101","CS-210"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 9, "max_workload_hrs": 25,
+      "free_text": "Works 25 hours a week, very limited time, only 9 credits max"
+    },
+    "expected_in": ["CS-201","ENG-101"],
+    "expected_out": ["CS-210","MATH-301"],
+    "expected_conflict": [],
+    "notes": "25hr job + 9cr limit. CS-201 (10hrs) + ENG-101 (4hrs) = 14hrs study + 25 job = 39. Already over. Should flag overload."
+  },
+  {
+    "id": "P07",
+    "student": {
+      "name": "Aditya", "year": 4, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": ["CS-101","CS-201","CS-210","CS-301","MATH-201","MATH-301"],
+      "wants_to_take": ["CS-401","CS-360","CS-480","BUS-201"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 12, "max_workload_hrs": 45,
+      "free_text": "Final year, all prereqs done, no job, want to graduate strong"
+    },
+    "expected_in": ["CS-401","CS-360","BUS-201"],
+    "expected_out": [],
+    "expected_conflict": ["CS-480"],
+    "notes": "CS-480 is 8am Tue/Thu = escalate. Others fine."
+  },
+  {
+    "id": "P08",
+    "student": {
+      "name": "Meera", "year": 2, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": ["CS-101"],
+      "wants_to_take": ["CS-201","CS-210","CS-350"],
+      "no_early_classes": false, "early_cutoff": "08:00",
+      "max_credits": 9, "max_workload_hrs": 40,
+      "free_text": "Second year, no job, only 9 credits this semester for personal reasons"
+    },
+    "expected_in": ["CS-201","CS-210"],
+    "expected_out": ["CS-350"],
+    "expected_conflict": [],
+    "notes": "CS-350 prereq CS-201 is being taken same semester = blocked. CS-201 Tue/Thu 10-11:30 conflicts with CS-350 Tue/Thu 9-10:30 anyway."
+  },
+  {
+    "id": "P09",
+    "student": {
+      "name": "Vikram", "year": 3, "major": "CS",
+      "job_hrs_per_week": 30,
+      "completed_courses": ["CS-101","CS-201","MATH-201"],
+      "wants_to_take": ["CS-301","CS-350","MATH-302","HUM-101"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 9, "max_workload_hrs": 20,
+      "free_text": "Works 30 hours, extremely limited time, max 9 credits, no mornings"
+    },
+    "expected_in": ["HUM-101"],
+    "expected_out": ["CS-350","MATH-302"],
+    "expected_conflict": ["CS-301"],
+    "notes": "CS-301 is 8am = escalate. 30hr job leaves almost no study time. Only HUM-101 (3hr study) is safe."
+  },
+  {
+    "id": "P10",
+    "student": {
+      "name": "Lakshmi", "year": 1, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": [],
+      "wants_to_take": ["CS-101","ENG-101","HUM-101","BUS-201"],
+      "no_early_classes": false, "early_cutoff": "09:00",
+      "max_credits": 11, "max_workload_hrs": 35,
+      "free_text": "First year, no job, no prereqs done, just getting started"
+    },
+    "expected_in": ["CS-101","ENG-101","HUM-101","BUS-201"],
+    "expected_out": [],
+    "expected_conflict": [],
+    "notes": "All 4 are no-prereq courses, no 8am, reasonable workload. All should be in."
+  },
+  {
+    "id": "P11",
+    "student": {
+      "name": "Rahul", "year": 2, "major": "CS",
+      "job_hrs_per_week": 15,
+      "completed_courses": ["CS-101","MATH-201"],
+      "wants_to_take": ["CS-201","MATH-301","CS-360","HUM-101"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 11, "max_workload_hrs": 32,
+      "free_text": "2nd year, 15hr job, hate mornings, need math elective"
+    },
+    "expected_in": ["CS-201","MATH-301","HUM-101"],
+    "expected_out": ["CS-360"],
+    "expected_conflict": [],
+    "notes": "CS-360 prereq CS-201 not done yet. Others pass prereqs, no early classes."
+  },
+  {
+    "id": "P12",
+    "student": {
+      "name": "Ananya", "year": 3, "major": "CS",
+      "job_hrs_per_week": 10,
+      "completed_courses": ["CS-101","CS-201","CS-210","MATH-201"],
+      "wants_to_take": ["CS-480","CS-320","MATH-302","ENG-101"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 11, "max_workload_hrs": 35,
+      "free_text": "3rd year, light job, need security elective, no 8am"
+    },
+    "expected_in": ["CS-320","MATH-302","ENG-101"],
+    "expected_out": [],
+    "expected_conflict": ["CS-480"],
+    "notes": "CS-480 is 8am = escalate. Others pass prereqs and timing."
+  },
+  {
+    "id": "P13",
+    "student": {
+      "name": "Siddharth", "year": 2, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": ["CS-101","CS-201","MATH-201","MATH-301"],
+      "wants_to_take": ["CS-301","CS-401","CS-350","CS-320"],
+      "no_early_classes": false, "early_cutoff": "08:00",
+      "max_credits": 12, "max_workload_hrs": 50,
+      "free_text": "Ambitious student, no job, fine with early classes, wants heavy load"
+    },
+    "expected_in": ["CS-350","CS-320"],
+    "expected_out": [],
+    "expected_conflict": ["CS-301","CS-401"],
+    "notes": "CS-301 prereq met, but it's 8am and student said fine with early. CS-401 needs CS-301 done first. Schedule them in order."
+  },
+  {
+    "id": "P14",
+    "student": {
+      "name": "Pooja", "year": 2, "major": "CS",
+      "job_hrs_per_week": 20,
+      "completed_courses": ["CS-101","MATH-201"],
+      "wants_to_take": ["CS-201","MATH-302","BUS-201","ENG-101"],
+      "no_early_classes": true, "early_cutoff": "09:00",
+      "max_credits": 11, "max_workload_hrs": 28,
+      "free_text": "Works 20 hours, wants practical courses, no mornings"
+    },
+    "expected_in": ["CS-201","BUS-201","ENG-101"],
+    "expected_out": ["MATH-302"],
+    "expected_conflict": [],
+    "notes": "All prereqs met. Workload: CS-201(10)+BUS-201(4)+ENG-101(4)=18 study+20 job=38. MATH-302(8hrs) would push to 46, over 28 limit."
+  },
+  {
+    "id": "P15",
+    "student": {
+      "name": "Nikhil", "year": 4, "major": "CS",
+      "job_hrs_per_week": 0,
+      "completed_courses": ["CS-101","CS-201","CS-210","CS-301","MATH-201","MATH-301","CS-350"],
+      "wants_to_take": ["CS-401","CS-320","CS-360","CS-480"],
+      "no_early_classes": false, "early_cutoff": "08:00",
+      "max_credits": 12, "max_workload_hrs": 50,
+      "free_text": "Final year, all prereqs done, no job, fine with any time, want to max out"
+    },
+    "expected_in": ["CS-401","CS-320","CS-360"],
+    "expected_out": [],
+    "expected_conflict": ["CS-480"],
+    "notes": "CS-480 prereq CS-210 is done. All good. CS-480 is 8am but student is fine. However workload CS-401(14)+CS-320(11)+CS-360(10)+CS-480(11)=46 which might be too much."
+  }
+]

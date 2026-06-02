@@ -1,112 +1,107 @@
 [
   {
-    "id": "CS-101",
-    "name": "Intro to Programming",
-    "credits": 3,
-    "days": ["Mon", "Wed", "Fri"],
-    "start": "09:00",
-    "end": "10:00",
-    "prereqs": [],
-    "workload_hrs_per_week": 6,
-    "difficulty": "easy"
+    "id": "CS-101", "name": "Intro to Programming",
+    "credits": 3, "days": ["Mon","Wed","Fri"],
+    "start": "09:00", "end": "10:00",
+    "prereqs": [], "workload_hrs_per_week": 6,
+    "difficulty": "easy", "category": "core"
   },
   {
-    "id": "CS-201",
-    "name": "Data Structures",
-    "credits": 3,
-    "days": ["Tue", "Thu"],
-    "start": "10:00",
-    "end": "11:30",
-    "prereqs": ["CS-101"],
-    "workload_hrs_per_week": 10,
-    "difficulty": "medium"
+    "id": "CS-201", "name": "Data Structures",
+    "credits": 3, "days": ["Tue","Thu"],
+    "start": "10:00", "end": "11:30",
+    "prereqs": ["CS-101"], "workload_hrs_per_week": 10,
+    "difficulty": "medium", "category": "core"
   },
   {
-    "id": "CS-301",
-    "name": "Algorithms",
-    "credits": 3,
-    "days": ["Mon", "Wed"],
-    "start": "08:00",
-    "end": "09:30",
-    "prereqs": ["CS-201"],
-    "workload_hrs_per_week": 12,
-    "difficulty": "hard"
+    "id": "CS-301", "name": "Algorithms",
+    "credits": 3, "days": ["Mon","Wed"],
+    "start": "08:00", "end": "09:30",
+    "prereqs": ["CS-201"], "workload_hrs_per_week": 12,
+    "difficulty": "hard", "category": "core"
   },
   {
-    "id": "MATH-201",
-    "name": "Discrete Math",
-    "credits": 3,
-    "days": ["Mon", "Wed", "Fri"],
-    "start": "08:00",
-    "end": "09:00",
-    "prereqs": [],
-    "workload_hrs_per_week": 8,
-    "difficulty": "medium"
+    "id": "CS-350", "name": "Database Systems",
+    "credits": 3, "days": ["Tue","Thu"],
+    "start": "09:00", "end": "10:30",
+    "prereqs": ["CS-201"], "workload_hrs_per_week": 10,
+    "difficulty": "medium", "category": "elective"
   },
   {
-    "id": "MATH-301",
-    "name": "Linear Algebra",
-    "credits": 3,
-    "days": ["Tue", "Thu"],
-    "start": "14:00",
-    "end": "15:30",
-    "prereqs": ["MATH-201"],
-    "workload_hrs_per_week": 9,
-    "difficulty": "medium"
+    "id": "CS-401", "name": "Machine Learning",
+    "credits": 3, "days": ["Mon","Wed"],
+    "start": "14:00", "end": "15:30",
+    "prereqs": ["CS-301", "MATH-301"], "workload_hrs_per_week": 14,
+    "difficulty": "hard", "category": "elective"
   },
   {
-    "id": "ENG-101",
-    "name": "Technical Writing",
-    "credits": 2,
-    "days": ["Fri"],
-    "start": "11:00",
-    "end": "13:00",
-    "prereqs": [],
-    "workload_hrs_per_week": 4,
-    "difficulty": "easy"
+    "id": "CS-210", "name": "Computer Networks",
+    "credits": 3, "days": ["Mon","Wed","Fri"],
+    "start": "10:00", "end": "11:00",
+    "prereqs": ["CS-101"], "workload_hrs_per_week": 9,
+    "difficulty": "medium", "category": "elective"
   },
   {
-    "id": "CS-401",
-    "name": "Machine Learning",
-    "credits": 3,
-    "days": ["Mon", "Wed"],
-    "start": "14:00",
-    "end": "15:30",
-    "prereqs": ["CS-301", "MATH-301"],
-    "workload_hrs_per_week": 14,
-    "difficulty": "hard"
+    "id": "CS-320", "name": "Operating Systems",
+    "credits": 3, "days": ["Tue","Thu"],
+    "start": "13:00", "end": "14:30",
+    "prereqs": ["CS-201"], "workload_hrs_per_week": 11,
+    "difficulty": "hard", "category": "core"
   },
   {
-    "id": "CS-350",
-    "name": "Database Systems",
-    "credits": 3,
-    "days": ["Tue", "Thu"],
-    "start": "09:00",
-    "end": "10:30",
-    "prereqs": ["CS-201"],
-    "workload_hrs_per_week": 10,
-    "difficulty": "medium"
+    "id": "MATH-201", "name": "Discrete Math",
+    "credits": 3, "days": ["Mon","Wed","Fri"],
+    "start": "08:00", "end": "09:00",
+    "prereqs": [], "workload_hrs_per_week": 8,
+    "difficulty": "medium", "category": "math"
   },
   {
-    "id": "HUM-101",
-    "name": "Ethics in Technology",
-    "credits": 2,
-    "days": ["Wed"],
-    "start": "15:00",
-    "end": "17:00",
-    "prereqs": [],
-    "workload_hrs_per_week": 3,
-    "difficulty": "easy"
+    "id": "MATH-301", "name": "Linear Algebra",
+    "credits": 3, "days": ["Tue","Thu"],
+    "start": "14:00", "end": "15:30",
+    "prereqs": ["MATH-201"], "workload_hrs_per_week": 9,
+    "difficulty": "medium", "category": "math"
   },
   {
-    "id": "CS-210",
-    "name": "Computer Networks",
-    "credits": 3,
-    "days": ["Mon", "Wed", "Fri"],
-    "start": "10:00",
-    "end": "11:00",
-    "prereqs": ["CS-101"],
-    "workload_hrs_per_week": 9,
-    "difficulty": "medium"
+    "id": "MATH-302", "name": "Probability & Statistics",
+    "credits": 3, "days": ["Mon","Wed"],
+    "start": "11:00", "end": "12:30",
+    "prereqs": ["MATH-201"], "workload_hrs_per_week": 8,
+    "difficulty": "medium", "category": "math"
+  },
+  {
+    "id": "ENG-101", "name": "Technical Writing",
+    "credits": 2, "days": ["Fri"],
+    "start": "11:00", "end": "13:00",
+    "prereqs": [], "workload_hrs_per_week": 4,
+    "difficulty": "easy", "category": "humanities"
+  },
+  {
+    "id": "HUM-101", "name": "Ethics in Technology",
+    "credits": 2, "days": ["Wed"],
+    "start": "15:00", "end": "17:00",
+    "prereqs": [], "workload_hrs_per_week": 3,
+    "difficulty": "easy", "category": "humanities"
+  },
+  {
+    "id": "BUS-201", "name": "Project Management",
+    "credits": 2, "days": ["Tue"],
+    "start": "16:00", "end": "18:00",
+    "prereqs": [], "workload_hrs_per_week": 4,
+    "difficulty": "easy", "category": "elective"
+  },
+  {
+    "id": "CS-360", "name": "Software Engineering",
+    "credits": 3, "days": ["Mon","Wed","Fri"],
+    "start": "13:00", "end": "14:00",
+    "prereqs": ["CS-201"], "workload_hrs_per_week": 10,
+    "difficulty": "medium", "category": "core"
+  },
+  {
+    "id": "CS-480", "name": "Computer Security",
+    "credits": 3, "days": ["Tue","Thu"],
+    "start": "08:00", "end": "09:30",
+    "prereqs": ["CS-210"], "workload_hrs_per_week": 11,
+    "difficulty": "hard", "category": "elective"
   }
 ]
