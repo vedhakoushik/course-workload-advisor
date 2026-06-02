@@ -1,0 +1,16 @@
+{
+  "name": "Bella",
+  "year": 2,
+  "major": "CS",
+  "job_hrs_per_week": 15,
+  "completed_courses": ["CS-101", "MATH-201"],
+  "wants_to_take": ["CS-201", "CS-301", "MATH-301", "ENG-101", "HUM-101"],
+  "preferences": {
+    "no_early_classes": true,
+    "early_cutoff": "09:00",
+    "max_credits": 12,
+    "max_workload_hrs_per_week": 35
+  },
+  "requirements_needed": ["math_elective", "humanities"],
+  "free_text": "I am a 2nd year CS major. I work 15 hrs/week and I hate anything before 9am. I need a math elective and a humanities credit this semester."
+}
