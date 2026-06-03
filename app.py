@@ -91,6 +91,38 @@ with col2:
         f_max_c = st.slider("Max credits", 9, 18, 12)
         f_max_w = st.slider("Max study hrs/week", 20, 60, 35)
 
+# ── Wishlist upload ───────────────────────────────────────────────────────────
+st.markdown("### 📄 Or upload your course wishlist")
+st.caption("Upload a .json, .csv, or .txt file listing the course IDs you want this semester.")
+
+from src.advisor import parse_wishlist_file
+wishlist_ids = []
+uploaded = st.file_uploader(
+    "Wishlist file",
+    type=["json", "csv", "txt"],
+    label_visibility="collapsed",
+)
+if uploaded is not None:
+    raw = uploaded.read().decode("utf-8", errors="replace")
+    wishlist_ids = parse_wishlist_file(raw, CATALOG)
+    if wishlist_ids:
+        st.success(f"Found {len(wishlist_ids)} valid course(s): {', '.join(wishlist_ids)}")
+    else:
+        st.warning("No valid course IDs found in the file. Check the IDs match the catalog.")
+
+# Sample wishlist download so users know the format
+with st.expander("What should the file look like?", expanded=False):
+    st.markdown("**Any of these formats works:**")
+    st.code('["CS-201", "MATH-301", "HUM-101", "ENG-101"]', language="json")
+    st.code("CS-201\nMATH-301\nHUM-101\nENG-101", language="text")
+    st.code("CS-201, MATH-301, HUM-101, ENG-101", language="text")
+    st.download_button(
+        "Download a sample wishlist.json",
+        data='["CS-201", "MATH-301", "HUM-101", "ENG-101"]',
+        file_name="wishlist.json",
+        mime="application/json",
+    )
+
 # Available courses preview
 with st.expander("View available courses (catalog)", expanded=False):
     cols = st.columns(3)
@@ -111,12 +143,16 @@ if not run_btn:
 if free_text.strip():
     with st.spinner("Parsing your situation..."):
         student = parse_student_free_text(free_text.strip(), CATALOG)
+    # Uploaded wishlist overrides whatever the free text said they want
+    if wishlist_ids:
+        student.wants_to_take = wishlist_ids
 else:
     student = StudentProfile(
         name=f_name, year=f_year, major=f_major,
         job_hrs_per_week=f_job,
         completed_courses=[x.strip() for x in f_done.split(",") if x.strip()],
-        wants_to_take=[x.strip() for x in f_want.split(",") if x.strip()],
+        # Wishlist file takes priority over the typed "want to take" field
+        wants_to_take=wishlist_ids or [x.strip() for x in f_want.split(",") if x.strip()],
         no_early_classes=f_early,
         early_cutoff="09:00",
         max_credits=f_max_c,

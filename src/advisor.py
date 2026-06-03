@@ -106,6 +106,35 @@ Rules:
         )
 
 
+def parse_wishlist_file(raw_text: str, catalog: list[dict]) -> list[str]:
+    """
+    Parse an uploaded wishlist into a list of valid course IDs.
+    Accepts:
+      - JSON: ["CS-201", "MATH-301"]  or  {"courses": ["CS-201"]}
+      - CSV / TXT: one ID per line, or comma-separated, e.g. "CS-201, MATH-301"
+    Only returns IDs that exist in the catalog.
+    """
+    valid_ids = {c["id"] for c in catalog}
+    found = []
+
+    raw_text = raw_text.strip()
+    # Try JSON first
+    try:
+        data = json.loads(raw_text)
+        if isinstance(data, dict):
+            data = data.get("courses") or data.get("wishlist") or []
+        if isinstance(data, list):
+            found = [str(x).strip().upper() for x in data]
+    except Exception:
+        # Fall back to plain text — split on commas, newlines, spaces
+        tokens = re.split(r"[,\n\r\t ]+", raw_text)
+        found = [t.strip().upper() for t in tokens if t.strip()]
+
+    # Keep only IDs that match the catalog (case-insensitive)
+    valid_upper = {v.upper(): v for v in valid_ids}
+    return [valid_upper[f] for f in found if f in valid_upper]
+
+
 # ── Step 2: Hard constraint filter ───────────────────────────────────────────
 
 def apply_hard_constraints(
