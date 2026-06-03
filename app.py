@@ -145,44 +145,42 @@ with st.expander("View available courses (catalog)", expanded=False):
 
 run_btn = st.button("Get My Schedule →", type="primary", use_container_width=True)
 
-if not run_btn:
+# ── Run the agent (store result in session_state so choices persist) ──────────
+if run_btn:
+    if free_text.strip():
+        with st.spinner("Parsing your situation..."):
+            student = parse_student_free_text(free_text.strip(), CATALOG)
+        if wishlist_ids:
+            student.wants_to_take = wishlist_ids
+    else:
+        student = StudentProfile(
+            name=f_name, year=f_year, major=f_major,
+            job_hrs_per_week=f_job,
+            completed_courses=[x.strip() for x in f_done.split(",") if x.strip()],
+            wants_to_take=wishlist_ids or [x.strip() for x in f_want.split(",") if x.strip()],
+            no_early_classes=f_early, early_cutoff="09:00",
+            max_credits=f_max_c, max_workload_hrs=f_max_w, free_text="",
+        )
+
+    with st.spinner("Analysing your schedule..."):
+        result = run_advisor(student, CATALOG)
+
+    # Persist so resolution widgets survive Streamlit reruns
+    st.session_state["result"]   = result.model_dump()
+    st.session_state["catalog"]  = CATALOG
+    st.session_state["resolutions"] = {}   # reset previous choices
+
+# Nothing run yet → stop
+if "result" not in st.session_state:
     st.stop()
 
-# ── Build student profile ─────────────────────────────────────────────────────
-if free_text.strip():
-    with st.spinner("Parsing your situation..."):
-        student = parse_student_free_text(free_text.strip(), CATALOG)
-    # Uploaded wishlist overrides whatever the free text said they want
-    if wishlist_ids:
-        student.wants_to_take = wishlist_ids
-else:
-    student = StudentProfile(
-        name=f_name, year=f_year, major=f_major,
-        job_hrs_per_week=f_job,
-        completed_courses=[x.strip() for x in f_done.split(",") if x.strip()],
-        # Wishlist file takes priority over the typed "want to take" field
-        wants_to_take=wishlist_ids or [x.strip() for x in f_want.split(",") if x.strip()],
-        no_early_classes=f_early,
-        early_cutoff="09:00",
-        max_credits=f_max_c,
-        max_workload_hrs=f_max_w,
-        free_text="",
-    )
+# Load persisted result
+from src.models import ScheduleResult
+result  = ScheduleResult(**st.session_state["result"])
+CATALOG = st.session_state.get("catalog", CATALOG)
+cat_map = {c["id"]: c for c in CATALOG}
 
 st.divider()
-
-# ── Run the agent ─────────────────────────────────────────────────────────────
-status_box = st.empty()
-progress   = []
-
-def on_progress(msg):
-    progress.append(msg)
-    status_box.info("\n".join(f"• {m}" for m in progress[-4:]))
-
-with st.spinner("Analysing your schedule..."):
-    result = run_advisor(student, CATALOG, stream_callback=on_progress)
-
-status_box.empty()
 
 # ── Summary banner ────────────────────────────────────────────────────────────
 st.markdown("## Your Schedule")
@@ -222,12 +220,14 @@ if result.recommended:
             unsafe_allow_html=True,
         )
 
-# ── Escalated — needs student decision ───────────────────────────────────────
+# ── Escalated — INTERACTIVE: student makes the call here ──────────────────────
 if result.escalated:
     st.markdown("### ⚠️ Needs Your Decision")
-    for d in result.escalated:
+    st.caption("Make a choice for each conflict below, then click **Apply my decisions**.")
+
+    for i, d in enumerate(result.escalated):
         st.markdown(
-            f'<div class="card esc-card">'
+            f'<div class="card esc-card" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0">'
             f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
             f'<span style="font-weight:700;color:#f3f4f6">{d.course_id} — {d.course_name}</span>'
             f'<span class="badge-esc">CONFLICT</span></div>'
@@ -236,6 +236,86 @@ if result.escalated:
             f'</div>',
             unsafe_allow_html=True,
         )
+
+        # Build choice options based on conflict type
+        if "+" in d.course_id:
+            # Time conflict: "A+B" → keep one, drop one
+            a, b = d.course_id.split("+", 1)
+            a_name = cat_map.get(a, {}).get("name", a)
+            b_name = cat_map.get(b, {}).get("name", b)
+            options = [f"Keep {a} ({a_name})", f"Keep {b} ({b_name})", "Drop both"]
+        elif d.escalate_reason and "co-requisite" in d.escalate_reason.lower():
+            # Co-requisite: add the pair or drop this course
+            options = [f"Add the co-requisite & keep {d.course_id}", f"Drop {d.course_id}"]
+        else:
+            # Early class or generic: take it or skip it
+            options = [f"Take {d.course_id} anyway", f"Skip {d.course_id}"]
+
+        choice = st.radio(
+            f"Decision for {d.course_id}",
+            options,
+            key=f"resolve_{i}",
+            label_visibility="collapsed",
+            horizontal=True,
+        )
+        st.session_state["resolutions"][str(i)] = choice
+        st.markdown("<div style='margin-bottom:12px'></div>", unsafe_allow_html=True)
+
+    # ── Apply decisions ──────────────────────────────────────────────────────
+    if st.button("Apply my decisions →", type="primary", use_container_width=True):
+        added, dropped = [], []
+        for i, d in enumerate(result.escalated):
+            choice = st.session_state["resolutions"].get(str(i), "")
+            if choice.startswith("Keep "):
+                kept = choice.split()[1]
+                added.append(kept)
+                # the other side of the pair is dropped
+                if "+" in d.course_id:
+                    for part in d.course_id.split("+"):
+                        if part != kept:
+                            dropped.append(part)
+            elif choice.startswith("Take "):
+                added.append(d.course_id)
+            elif choice.startswith("Add the co-requisite"):
+                added.append(d.course_id)
+                # find the co-req from escalate_reason
+                course = cat_map.get(d.course_id, {})
+                if course.get("corequisite"):
+                    added.append(course["corequisite"])
+            # "Skip"/"Drop both"/"Drop X" → nothing added
+
+        st.session_state["final_added"]   = added
+        st.session_state["final_dropped"] = dropped
+        st.success(f"Decisions applied — added {added or 'nothing'}, dropped {dropped or 'nothing'}.")
+
+# ── Final schedule after resolutions ──────────────────────────────────────────
+if st.session_state.get("final_added") is not None:
+    st.divider()
+    st.markdown("### 🎯 Final Schedule (after your decisions)")
+    added   = st.session_state.get("final_added", [])
+    dropped = set(st.session_state.get("final_dropped", []))
+
+    final_ids = [d.course_id for d in result.recommended if d.course_id not in dropped]
+    final_ids += [a for a in added if a not in final_ids]
+
+    final_courses = [cat_map[c] for c in final_ids if c in cat_map]
+    total_workload = sum(c.get("workload_hrs_per_week", 0) for c in final_courses)
+    total_credits  = sum(c.get("credits", 0) for c in final_courses)
+
+    for c in final_courses:
+        st.markdown(
+            f'<div class="card in-card">'
+            f'<span style="font-weight:700;color:#f3f4f6">{c["id"]} — {c["name"]}</span>'
+            f'<span style="color:#9ca3af;font-size:13px;margin-left:8px">'
+            f'{c.get("credits","?")}cr · ~{c.get("workload_hrs_per_week","?")} hrs/week</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+    st.info(
+        f"**Final:** {len(final_courses)} courses · {total_credits} credits · "
+        f"~{total_workload} study hrs/week + {result.job_hrs_per_week}hr job = "
+        f"**{total_workload + result.job_hrs_per_week} hrs/week total**"
+    )
 
 # ── Excluded courses ──────────────────────────────────────────────────────────
 if result.excluded:
