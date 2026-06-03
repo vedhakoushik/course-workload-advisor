@@ -1,0 +1,93 @@
+[
+  {
+    "id": "BCLE215L", "name": "Waste Management",
+    "type": "TH", "credits": 3.0, "corequisite": null,
+    "days": ["Mon", "Wed"], "start": "11:00", "end": "12:30",
+    "prereqs": [], "workload_hrs_per_week": 6, "difficulty": "easy",
+    "category": "open_elective"
+  },
+  {
+    "id": "BCSE204L", "name": "Design and Analysis of Algorithms",
+    "type": "TH", "credits": 3.0, "corequisite": "BCSE204P",
+    "days": ["Tue", "Thu"], "start": "09:00", "end": "10:30",
+    "prereqs": [], "workload_hrs_per_week": 9, "difficulty": "hard",
+    "category": "core"
+  },
+  {
+    "id": "BCSE204P", "name": "Design and Analysis of Algorithms Lab",
+    "type": "LO", "credits": 1.0, "corequisite": "BCSE204L",
+    "days": ["Thu"], "start": "14:00", "end": "16:00",
+    "prereqs": [], "workload_hrs_per_week": 4, "difficulty": "medium",
+    "category": "core"
+  },
+  {
+    "id": "BCSE301L", "name": "Software Engineering",
+    "type": "TH", "credits": 3.0, "corequisite": "BCSE301P",
+    "days": ["Mon", "Wed"], "start": "08:00", "end": "09:30",
+    "prereqs": [], "workload_hrs_per_week": 8, "difficulty": "medium",
+    "category": "core"
+  },
+  {
+    "id": "BCSE301P", "name": "Software Engineering Lab",
+    "type": "LO", "credits": 1.0, "corequisite": "BCSE301L",
+    "days": ["Wed"], "start": "14:00", "end": "16:00",
+    "prereqs": [], "workload_hrs_per_week": 4, "difficulty": "medium",
+    "category": "core"
+  },
+  {
+    "id": "BCSE306L", "name": "Artificial Intelligence",
+    "type": "TH", "credits": 3.0, "corequisite": null,
+    "days": ["Tue", "Thu"], "start": "11:00", "end": "12:30",
+    "prereqs": [], "workload_hrs_per_week": 9, "difficulty": "hard",
+    "category": "core"
+  },
+  {
+    "id": "BCSE316L", "name": "Design of Smart Cities",
+    "type": "TH", "credits": 3.0, "corequisite": null,
+    "days": ["Mon", "Fri"], "start": "10:00", "end": "11:30",
+    "prereqs": [], "workload_hrs_per_week": 6, "difficulty": "medium",
+    "category": "elective"
+  },
+  {
+    "id": "BCSE355L", "name": "Cloud Architecture Design",
+    "type": "TH", "credits": 3.0, "corequisite": null,
+    "days": ["Wed", "Fri"], "start": "09:00", "end": "10:30",
+    "prereqs": [], "workload_hrs_per_week": 7, "difficulty": "medium",
+    "category": "elective"
+  },
+  {
+    "id": "BMAT205L", "name": "Discrete Mathematics and Graph Theory",
+    "type": "TH", "credits": 4.0, "corequisite": null,
+    "days": ["Mon", "Wed", "Fri"], "start": "08:00", "end": "09:00",
+    "prereqs": [], "workload_hrs_per_week": 9, "difficulty": "hard",
+    "category": "math"
+  },
+  {
+    "id": "BSSC102N", "name": "Indian Constitution",
+    "type": "OC", "credits": 2.0, "corequisite": null,
+    "days": ["Fri"], "start": "15:00", "end": "17:00",
+    "prereqs": [], "workload_hrs_per_week": 2, "difficulty": "easy",
+    "category": "soft_core"
+  },
+  {
+    "id": "BSTS301P", "name": "Advanced Competitive Coding - I",
+    "type": "SS", "credits": 1.5, "corequisite": null,
+    "days": ["Sat"], "start": "10:00", "end": "12:00",
+    "prereqs": [], "workload_hrs_per_week": 5, "difficulty": "hard",
+    "category": "skill"
+  },
+  {
+    "id": "BECE204L", "name": "Electronic Materials and Devices",
+    "type": "TH", "credits": 3.0, "corequisite": null,
+    "days": ["Tue", "Thu"], "start": "14:00", "end": "15:30",
+    "prereqs": [], "workload_hrs_per_week": 7, "difficulty": "medium",
+    "category": "elective"
+  },
+  {
+    "id": "BECE205L", "name": "Circuit Theory",
+    "type": "TH", "credits": 4.0, "corequisite": null,
+    "days": ["Mon", "Wed", "Fri"], "start": "10:00", "end": "11:00",
+    "prereqs": [], "workload_hrs_per_week": 9, "difficulty": "hard",
+    "category": "elective"
+  }
+]

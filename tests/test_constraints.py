@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.constraints import (
     check_prerequisites,
     check_time_conflict,
+    check_corequisites,
     is_early_class,
     filter_eligible_courses,
     find_all_conflicts,
@@ -140,6 +141,34 @@ class TestFilterEligible:
         )
         assert len(result["ineligible"]) == 1
         assert "not found" in result["ineligible"][0]["reason"]
+
+
+# ── Co-requisites (VIT-style lab + theory pairing) ────────────
+
+class TestCorequisites:
+    CATALOG = [
+        {"id": "BCSE204L", "name": "DAA", "corequisite": "BCSE204P"},
+        {"id": "BCSE204P", "name": "DAA Lab", "corequisite": "BCSE204L"},
+        {"id": "BCSE306L", "name": "AI", "corequisite": None},
+    ]
+
+    def test_both_present_no_violation(self):
+        v = check_corequisites(["BCSE204L", "BCSE204P"], self.CATALOG)
+        assert v == []
+
+    def test_missing_coreq_is_violation(self):
+        v = check_corequisites(["BCSE204L"], self.CATALOG)
+        assert len(v) == 1
+        assert v[0]["missing_coreq"] == "BCSE204P"
+
+    def test_no_coreq_course_never_violates(self):
+        v = check_corequisites(["BCSE306L"], self.CATALOG)
+        assert v == []
+
+    def test_lab_without_theory_violates(self):
+        v = check_corequisites(["BCSE204P"], self.CATALOG)
+        assert len(v) == 1
+        assert v[0]["missing_coreq"] == "BCSE204L"
 
 
 # ── Find all conflicts ────────────────────────────────────────

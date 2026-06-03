@@ -63,6 +63,35 @@ def check_time_conflict(course_a: dict, course_b: dict) -> tuple[bool, str]:
     return False, "No time overlap"
 
 
+def check_corequisites(selected_ids: list[str], catalog: list[dict]) -> list[dict]:
+    """
+    Co-requisite check (VIT-style): if a course requires a co-requisite,
+    BOTH must be in the schedule together (e.g. BCSE204L theory needs
+    BCSE204P lab). Returns a list of violations.
+
+    Deterministic — no LLM.
+    """
+    catalog_map = {c["id"]: c for c in catalog}
+    selected    = set(selected_ids)
+    violations  = []
+
+    for cid in selected_ids:
+        course = catalog_map.get(cid)
+        if not course:
+            continue
+        coreq = course.get("corequisite")
+        if coreq and coreq not in selected:
+            violations.append({
+                "course_id": cid,
+                "missing_coreq": coreq,
+                "reason": (
+                    f"{cid} ({course['name']}) requires its co-requisite "
+                    f"{coreq} to be taken in the same semester."
+                ),
+            })
+    return violations
+
+
 def is_early_class(course: dict, cutoff: str = "09:00") -> tuple[bool, str]:
     """
     Returns (is_early: bool, reason: str).

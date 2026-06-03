@@ -16,8 +16,13 @@ import streamlit as st
 from src.advisor import parse_student_free_text, run_advisor
 from src.models import Decision, StudentProfile
 
-DATA    = Path(__file__).parent / "data"
-CATALOG = json.loads((DATA / "catalog.json").read_text())
+DATA = Path(__file__).parent / "data"
+
+# Catalog picker — VIT real courses or the demo catalog
+_CATALOGS = {
+    "VIT (my real courses)": "vit_catalog.json",
+    "Demo catalog":          "catalog.json",
+}
 
 
 # ── Page config ───────────────────────────────────────────────────────────────
@@ -60,6 +65,10 @@ st.caption("Tell me your situation — I'll recommend a schedule, explain every 
 if not os.getenv("GEMINI_API_KEY"):
     st.error("GEMINI_API_KEY not set. Add it to your .env file.")
     st.stop()
+
+# ── Catalog picker ────────────────────────────────────────────────────────────
+catalog_choice = st.selectbox("Course catalog", list(_CATALOGS.keys()))
+CATALOG = json.loads((DATA / _CATALOGS[catalog_choice]).read_text())
 
 
 # ── Input ─────────────────────────────────────────────────────────────────────

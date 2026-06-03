@@ -26,6 +26,7 @@ load_dotenv()
 from src.constraints import (
     filter_eligible_courses,
     find_all_conflicts,
+    check_corequisites,
     is_early_class,
 )
 from src.models import (
@@ -367,6 +368,25 @@ def run_advisor(
         all_decisions.append(decision)
         if decision.decision == Decision.IN:
             selected.append(course)
+
+    # Co-requisite check on the final selection (VIT lab+theory pairing)
+    selected_ids = [c["id"] for c in selected]
+    coreq_violations = check_corequisites(selected_ids, catalog)
+    for v in coreq_violations:
+        catalog_map = {c["id"]: c for c in catalog}
+        course = catalog_map[v["course_id"]]
+        all_decisions.append(CourseDecision(
+            course_id=v["course_id"],
+            course_name=course["name"],
+            decision=Decision.CONFLICT,
+            reason=v["reason"],
+            workload_hrs=course.get("workload_hrs_per_week", 0),
+            confidence=Confidence.HIGH,
+            escalate_reason=(
+                f"You picked {v['course_id']} but not its required co-requisite "
+                f"{v['missing_coreq']}. Add {v['missing_coreq']} or drop {v['course_id']}."
+            ),
+        ))
 
     _emit("Building final schedule...")
     result = build_schedule(all_decisions, student)
